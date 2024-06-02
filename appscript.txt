@@ -1,0 +1,17 @@
+function doGet(e) {
+  return handleRequest(e);
+}
+
+function doPost(e) {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var params = e.parameter;
+  
+  // Append data to the sheet
+  sheet.appendRow([new Date(), params.temperature, params.humidity]);
+  
+  return ContentService.createTextOutput("Success");
+}
