@@ -2,15 +2,15 @@
 #include <WiFiClientSecure.h>
 #include <DHT.h>
 
-#define DHTPIN D1     // Define the pin where the sensor is connected
-#define DHTTYPE DHT22 // Define the type of sensor
+#define DHTPIN D1     // Pin data DHT kita
+#define DHTTYPE DHT22 // Tipe sensor DHT yang kita gunakan
 
-const char* ssid = "SSID";          // Replace with your WiFi SSID
-const char* password = "12345678";  // Replace with your WiFi password
-const char* host = "script.google.com";  // Host for Google Apps Script
-const int httpsPort = 443;               // Default port for HTTPS
+const char* ssid = "SSID";          //Masukkan nama WiFi kita
+const char* password = "12345678";  //Masukkan kata sandi/password WiFi kita
+const char* host = "script.google.com";  //Host yang kita gunakan
+const int httpsPort = 443;               //Httpsport untuk spreadsheet tidak perlu diubah
 
-const char* serverName = "AKfycbw3z5d7sU9SP9wLGj7r-2n0TVpScvX_chDw-1szvo5HhPQ1Ptp0iMhUTkv3rcoQqpbcKw";  // Replace with your Google Script URL
+const char* serverName = "Masukkan id penerapan Web app url "; // ID Penerapan aplikasi web url di app script
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -20,7 +20,7 @@ void setup() {
   
   dht.begin();
   
-  // Connect to Wi-Fi
+  // Menghubungkan ke WiFi yang kita buat
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -32,7 +32,7 @@ void setup() {
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
     WiFiClientSecure client;
-    client.setInsecure(); // This is insecure, but necessary if you don't have a valid SSL certificate for the server
+    client.setInsecure(); //Opsional digunakan untuk menonaktifkan verifikasi sertifikat
     
     Serial.print("Connecting to ");
     Serial.println(host);
@@ -44,7 +44,8 @@ void loop() {
 
 //    String url = "/macros/s/1uNALsrsxgQz9gCfVeoPdhARMbyzFlCJ3HAeavqpDBKw/exec?";
     String url = "/macros/s/AKfycbw3z5d7sU9SP9wLGj7r-2n0TVpScvX_chDw-1szvo5HhPQ1Ptp0iMhUTkv3rcoQqpbcKw/exec?"; // Replace with your actual script path
-    
+
+    //Membaca sensor DHT22
     float humidity = dht.readHumidity();
     float temperature = dht.readTemperature();
     
@@ -53,7 +54,7 @@ void loop() {
       return;
     }
     
-    // Prepare data to send
+    //Mempersiapkan data untuk dikirim
     String data = "temperature=" + String(temperature) + "&humidity=" + String(humidity);
     url += data;
     
@@ -85,5 +86,5 @@ void loop() {
     Serial.println("WiFi Disconnected");
   }
   
-  delay(10000); // Send data every 60 seconds
+  delay(10000); //Dapat diatur untuk waktu pengiriman data yang kalian inginkan setiap beberapa waktu
 }
